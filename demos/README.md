@@ -1,0 +1,1 @@
+Copied from https://github.com/hediet/vscode-debug-visualizer
