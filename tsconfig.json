@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "lib": ["ESNext", "ES6", "DOM"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "paths": {
+      "@types": ["./types"]
+    }
+  },
+  "exclude": ["node_modules", "demos"]
+}

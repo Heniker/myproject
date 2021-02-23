@@ -1,0 +1,41 @@
+{
+  "name": "infer-debug-types",
+  "private": true,
+  "publisher": "Heniker",
+  "displayName": "Infer Debug Types",
+  "description": "Create type definition from runtime values.",
+  "repository": {
+    "url": "https://github.com/Heniker/vscode-infer-debug-types",
+    "type": "git"
+  },
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.53.0"
+  },
+  "keywords": [
+    "debugger",
+    "debugging",
+    "debug",
+    "typescript",
+    "types"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onDebug"
+  ],
+  "scripts": {
+    "vscode:prepublish": "cd ../ && npm run compile"
+  },
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "inferDebugTypes.copyTypeToClipboard",
+        "title": "Copy Type to Clipbard",
+        "enablement": "inDebugMode"
+      }
+    ]
+  }
+}
