@@ -6,39 +6,33 @@
   "version": "0.2.0",
   "configurations": [
     // {
-    // 	"name": "Run Extension",
-    // 	"type": "extensionHost",
-    // 	"request": "launch",
-    // 	"args": [
-    // 		"--extensionDevelopmentPath=${workspaceFolder}"
-    // 	],
-    // 	"outFiles": [
-    // 		"${workspaceFolder}/dist/**/*.js"
-    // 	],
-    // 	"preLaunchTask": "${defaultBuildTask}"
+    //   "name": "Launch Program",
+    //   "program": "${file}",
+    //   "request": "launch",
+    //   "cwd": "${fileDirname}",
+    //   "skipFiles": ["<node_internals>/**"],
+    //   "type": "pwa-node"
     // },
     // {
-    // 	"name": "Extension Tests",
-    // 	"type": "extensionHost",
-    // 	"request": "launch",
-    // 	"args": [
-    // 		"--extensionDevelopmentPath=${workspaceFolder}",
-    // 		"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
-    // 	],
-    // 	"outFiles": [
-    // 		"${workspaceFolder}/out/test/**/*.js"
-    // 	],
-    // 	"preLaunchTask": "npm: test-watch"
+    //   "name": "Launch TypeScript",
+    //   "type": "node",
+    //   "request": "launch",
+    //   "runtimeArgs": ["-r", "ts-node/register"],
+    //   "args": ["${file}"],
+    //   // "cwd": "${fileDirname}",
+    //   "internalConsoleOptions": "openOnSessionStart",
+    //   "skipFiles": ["<node_internals>/**", "node_modules/**"],
+    //   "env": {
+    //     // "TS_NODE_PROJECT": "${workspaceFolder}/tsconfig.json"
+    //   }
     // },
     {
       "name": "Run Extension (Dev UI)",
       "type": "extensionHost",
       "request": "launch",
-      "runtimeExecutable": "${execPath}",
-      "args": ["--extensionDevelopmentPath=${workspaceFolder}", "${workspaceFolder}/demos/js"],
-      "env": {},
+      // "runtimeExecutable": "${execPath}",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}/dist", "${workspaceFolder}/demos/ts"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "npm: test-watch"
     }
   ]
 }

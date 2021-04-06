@@ -4,16 +4,17 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "lib": ["ESNext", "ES6", "DOM"],
-    "module": "commonjs",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "outDir": "dist",
     "skipLibCheck": true,
+    "sourceMap": true,
     "strict": true,
     "target": "ESNext",
     "esModuleInterop": true,
     "paths": {
-      "@types": ["./types"]
+      "@/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules", "demos"]
+  "include": ["src"]
 }

@@ -10,30 +10,19 @@
   },
   "version": "0.0.1",
   "engines": {
+    "node": "^15.12.0",
     "vscode": "^1.53.0"
   },
-  "keywords": [
-    "debugger",
-    "debugging",
-    "debug",
-    "typescript",
-    "types"
-  ],
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onDebug"
-  ],
-  "scripts": {
-    "vscode:prepublish": "cd ../ && npm run compile"
-  },
+  "keywords": ["debugger", "debugging", "debug", "typescript", "types"],
+  "categories": ["Other"],
+  "activationEvents": ["onDebug"],
+  "scripts": {},
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "inferDebugTypes.copyTypeToClipboard",
-        "title": "Copy Type to Clipbard",
+        "command": "inferDebugTypes.inferType",
+        "title": "Infer type",
         "enablement": "inDebugMode"
       }
     ]
