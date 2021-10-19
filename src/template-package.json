@@ -15,7 +15,7 @@
   },
   "keywords": ["debugger", "debugging", "debug", "typescript", "types"],
   "categories": ["Other"],
-  "activationEvents": ["onDebug"],
+  "activationEvents": ["*"],
   "scripts": {},
   "main": "./extension.js",
   "contributes": {

@@ -1,20 +1,17 @@
 import assert from 'assert'
 import path from 'path'
+import json5 from 'json5'
 import * as vscode from 'vscode'
+import * as events from '../events'
+import * as untypeTs from '../untype/ts'
 import { Command } from './types/Command'
 import * as Debug from 'src/types'
-import * as events from '../events'
-import { assertBack } from '../utils/assertBack'
-import * as untypeTs from '../untype/ts'
 
 const getSelectedWord = (editor: vscode.TextEditor) =>
   editor.selection.isEmpty
     ? editor.document.getText(editor.document.getWordRangeAtPosition(editor.selection.active))
     : editor.document.getText(editor.selection)
 
-// todo> this should be a generic InferType command class with better abstraction
-// Do not think that it's a good idea to introduce classes for every untype instance
-// Guess every untype instance should have full access to vscode api and
 export class InferType extends Command {
   public readonly name = 'inferType'
 
@@ -22,11 +19,12 @@ export class InferType extends Command {
 
   private currentFrame = 1
 
-  private tsxWarningShown = false
-
   constructor() {
     super()
-    events.DebugSessionCreate.on((it) => (this.session = it))
+    events.DebugSessionCreate.on((it) => {
+      this.session = it
+    })
+
     events.DebugMessage.on(async (msg) => {
       if (this.session && msg.event === 'stopped' && msg.body.threadId !== undefined) {
         const stackTrace = await this.session.customRequest('stackTrace', {
@@ -39,7 +37,9 @@ export class InferType extends Command {
   }
 
   async run() {
-    const editor: vscode.TextEditor = assertBack(vscode.window.activeTextEditor)
+    const editor = vscode.window.activeTextEditor
+
+    assert(editor)
     assert(editor.document)
     assert(editor.selection)
     assert(this.session, 'Debug session not found')
@@ -47,12 +47,9 @@ export class InferType extends Command {
     const varName = getSelectedWord(editor)
     const fileExt = editor.document.fileName ? path.extname(editor.document.fileName).slice(1) : ''
 
-    if (fileExt === 'tsx' && !this.tsxWarningShown) {
-      this.tsxWarningShown = true
-      vscode.window.showWarningMessage('Usage in tsx files is not tested. Expect unexpected!')
-    } else if (fileExt !== 'ts') {
-      vscode.window.showErrorMessage('Only TS files are supported ATM')
-      return false
+    if (fileExt !== 'ts') {
+      void vscode.window.showErrorMessage('Only TS files are supported ATM')
+      return
     }
 
     const evaluated = await this.session.customRequest('evaluate', {
@@ -61,21 +58,24 @@ export class InferType extends Command {
       context: 'clipboard',
     })
 
-    const runtimeRepresentation = JSON.parse(eval(`JSON.stringify(${evaluated.result})`))
+    // quicktype does not support JSON5. So have to stick with standard JSON
+    // which is a shame because we can't represent NaN, undefined and a bunch of other stuff
+    // https://github.com/quicktype/quicktype/issues/1777
+    const runtimeRepresentation = JSON.stringify(json5.parse(evaluated.result))
     const offset = editor.document.offsetAt(editor.selection.active)
 
     assert(offset, 'Unexpected offset error')
 
     try {
-      await untypeTs.init(editor.document)(offset, runtimeRepresentation)
-    } catch (err) {
-      if (err instanceof untypeTs.VariableNotFound) {
-        vscode.window.showErrorMessage('Variable or definition not found')
-      } else if (err instanceof untypeTs.InterfaceFault) {
-        vscode.window.showErrorMessage('Interface creation failed')
+      await untypeTs.addInterfaces(editor.document.fileName, offset, runtimeRepresentation)
+    } catch (error) {
+      if (error instanceof untypeTs.VariableNotFound) {
+        void vscode.window.showErrorMessage('Variable or definition not found')
+      } else if (error instanceof untypeTs.InterfaceFault) {
+        void vscode.window.showErrorMessage('Interface creation failed')
       } else {
-        vscode.window.showErrorMessage(err.message)
-        throw err
+        // vscode.window.showErrorMessage(err.message)
+        throw error
       }
     }
   }

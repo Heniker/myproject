@@ -1,7 +1,10 @@
 // https://github.com/microsoft/debug-adapter-protocol/tree/master
+// I used some script to extract those types, but idk where I put it
+// probably a good idea to extract this types to separate package
+// (why wasnt this done alredy by vscode team?)
 
-// all general `string` types in unions were replace with `String` type
-// for sole reason of preventing upcasting
+// all general `string` types in unions were replaced with `String` type
+// this was done to prevent type upcasting
 
 export interface ProtocolMessage {
   /**
@@ -14,7 +17,7 @@ export interface ProtocolMessage {
    * Message type.
    * Values: 'request', 'response', 'event', etc.
    */
-  type: 'request' | 'response' | 'event' | String
+  type: 'request' | 'response' | 'event' | string
 }
 
 export interface Request extends ProtocolMessage {
@@ -77,7 +80,7 @@ export interface Response extends ProtocolMessage {
    * 'cancelled': request was cancelled.
    * etc.
    */
-  message?: 'cancelled' | String
+  message?: 'cancelled' | string
 
   /**
    * Contains request result if success is true and optional error details if
@@ -117,7 +120,7 @@ export interface CancelArguments {
   progressId?: string
 }
 
-export interface CancelResponse extends Response {}
+export type CancelResponse = Response
 
 export interface InitializedEvent extends Event {
   event: 'initialized'
@@ -144,7 +147,7 @@ export interface StoppedEvent extends Event {
       | 'function breakpoint'
       | 'data breakpoint'
       | 'instruction breakpoint'
-      | String
+      | string
 
     /**
      * The full reason for the event, e.g. 'Paused on exception'. This string is
@@ -231,7 +234,7 @@ export interface ThreadEvent extends Event {
      * The reason for the event.
      * Values: 'started', 'exited', etc.
      */
-    reason: 'started' | 'exited' | String
+    reason: 'started' | 'exited' | string
 
     /**
      * The identifier of the thread.
@@ -248,7 +251,7 @@ export interface OutputEvent extends Event {
      * The output category. If not specified, 'console' is assumed.
      * Values: 'console', 'stdout', 'stderr', 'telemetry', etc.
      */
-    category?: 'console' | 'stdout' | 'stderr' | 'telemetry' | String
+    category?: 'console' | 'stdout' | 'stderr' | 'telemetry' | string
 
     /**
      * The output to report.
@@ -313,7 +316,7 @@ export interface BreakpointEvent extends Event {
      * The reason for the event.
      * Values: 'changed', 'new', 'removed', etc.
      */
-    reason: 'changed' | 'new' | 'removed' | String
+    reason: 'changed' | 'new' | 'removed' | string
 
     /**
      * The 'id' attribute is used to find the target breakpoint and the other
@@ -622,7 +625,7 @@ export interface InitializeRequestArguments {
    * is the native format.
    * Values: 'path', 'uri', etc.
    */
-  pathFormat?: 'path' | 'uri' | String
+  pathFormat?: 'path' | 'uri' | string
 
   /**
    * Client supports the optional type attribute for variables.
@@ -670,7 +673,7 @@ export interface ConfigurationDoneRequest extends Request {
 
 export interface ConfigurationDoneArguments {}
 
-export interface ConfigurationDoneResponse extends Response {}
+export type ConfigurationDoneResponse = Response
 
 export interface LaunchRequest extends Request {
   command: 'launch'
@@ -693,7 +696,7 @@ export interface LaunchRequestArguments {
   __restart?: any
 }
 
-export interface LaunchResponse extends Response {}
+export type LaunchResponse = Response
 
 export interface AttachRequest extends Request {
   command: 'attach'
@@ -710,7 +713,7 @@ export interface AttachRequestArguments {
   __restart?: any
 }
 
-export interface AttachResponse extends Response {}
+export type AttachResponse = Response
 
 export interface RestartRequest extends Request {
   command: 'restart'
@@ -720,7 +723,7 @@ export interface RestartRequest extends Request {
 
 export interface RestartArguments {}
 
-export interface RestartResponse extends Response {}
+export type RestartResponse = Response
 
 export interface DisconnectRequest extends Request {
   command: 'disconnect'
@@ -745,7 +748,7 @@ export interface DisconnectArguments {
   terminateDebuggee?: boolean
 }
 
-export interface DisconnectResponse extends Response {}
+export type DisconnectResponse = Response
 
 export interface TerminateRequest extends Request {
   command: 'terminate'
@@ -761,7 +764,7 @@ export interface TerminateArguments {
   restart?: boolean
 }
 
-export interface TerminateResponse extends Response {}
+export type TerminateResponse = Response
 
 export interface BreakpointLocationsRequest extends Request {
   command: 'breakpointLocations'
@@ -906,7 +909,7 @@ export interface SetExceptionBreakpointsArguments {
   exceptionOptions?: ExceptionOptions[]
 }
 
-export interface SetExceptionBreakpointsResponse extends Response {}
+export type SetExceptionBreakpointsResponse = Response
 
 export interface DataBreakpointInfoRequest extends Request {
   command: 'dataBreakpointInfo'
@@ -1051,7 +1054,7 @@ export interface NextArguments {
   granularity?: SteppingGranularity
 }
 
-export interface NextResponse extends Response {}
+export type NextResponse = Response
 
 export interface StepInRequest extends Request {
   command: 'stepIn'
@@ -1077,7 +1080,7 @@ export interface StepInArguments {
   granularity?: SteppingGranularity
 }
 
-export interface StepInResponse extends Response {}
+export type StepInResponse = Response
 
 export interface StepOutRequest extends Request {
   command: 'stepOut'
@@ -1098,7 +1101,7 @@ export interface StepOutArguments {
   granularity?: SteppingGranularity
 }
 
-export interface StepOutResponse extends Response {}
+export type StepOutResponse = Response
 
 export interface StepBackRequest extends Request {
   command: 'stepBack'
@@ -1119,7 +1122,7 @@ export interface StepBackArguments {
   granularity?: SteppingGranularity
 }
 
-export interface StepBackResponse extends Response {}
+export type StepBackResponse = Response
 
 export interface ReverseContinueRequest extends Request {
   command: 'reverseContinue'
@@ -1134,7 +1137,7 @@ export interface ReverseContinueArguments {
   threadId: number
 }
 
-export interface ReverseContinueResponse extends Response {}
+export type ReverseContinueResponse = Response
 
 export interface RestartFrameRequest extends Request {
   command: 'restartFrame'
@@ -1149,7 +1152,7 @@ export interface RestartFrameArguments {
   frameId: number
 }
 
-export interface RestartFrameResponse extends Response {}
+export type RestartFrameResponse = Response
 
 export interface GotoRequest extends Request {
   command: 'goto'
@@ -1169,7 +1172,7 @@ export interface GotoArguments {
   targetId: number
 }
 
-export interface GotoResponse extends Response {}
+export type GotoResponse = Response
 
 export interface PauseRequest extends Request {
   command: 'pause'
@@ -1184,7 +1187,7 @@ export interface PauseArguments {
   threadId: number
 }
 
-export interface PauseResponse extends Response {}
+export type PauseResponse = Response
 
 export interface StackTraceRequest extends Request {
   command: 'stackTrace'
@@ -1436,7 +1439,7 @@ export interface TerminateThreadsArguments {
   threadIds?: number[]
 }
 
-export interface TerminateThreadsResponse extends Response {}
+export type TerminateThreadsResponse = Response
 
 export interface ModulesRequest extends Request {
   command: 'modules'
@@ -1518,7 +1521,7 @@ export interface EvaluateArguments {
    * 'supportsClipboardContext' is true.
    * etc.
    */
-  context?: 'watch' | 'repl' | 'hover' | 'clipboard' | String
+  context?: 'watch' | 'repl' | 'hover' | 'clipboard' | string
 
   /**
    * Specifies details on how to format the Evaluate result.
@@ -2172,7 +2175,7 @@ export interface Module {
   /**
    * Unique identifier for the module.
    */
-  id: number | String
+  id: number | string
 
   /**
    * A name of the module.
@@ -2386,7 +2389,7 @@ export interface StackFrame {
   /**
    * The module associated with this frame, if any.
    */
-  moduleId?: number | String
+  moduleId?: number | string
 
   /**
    * An optional hint for how to present this frame in the UI.
@@ -2415,7 +2418,7 @@ export interface Scope {
    * should be returned from a 'scopes' request.
    * etc.
    */
-  presentationHint?: 'arguments' | 'locals' | 'registers' | String
+  presentationHint?: 'arguments' | 'locals' | 'registers' | string
 
   /**
    * The variables of this scope can be retrieved by passing the value of
@@ -2565,7 +2568,7 @@ export interface VariablePresentationHint {
     | 'mostDerivedClass'
     | 'virtual'
     | 'dataBreakpoint'
-    | String
+    | string
 
   /**
    * Set of attributes represented as an array of strings. Before introducing
@@ -2593,7 +2596,7 @@ export interface VariablePresentationHint {
     | 'canHaveObjectId'
     | 'hasSideEffects'
     | 'hasDataBreakpoint'
-    | String
+    | string
   )[]
 
   /**
@@ -2601,7 +2604,7 @@ export interface VariablePresentationHint {
    * the listed values.
    * Values: 'public', 'private', 'protected', 'internal', 'final', etc.
    */
-  visibility?: 'public' | 'private' | 'protected' | 'internal' | 'final' | String
+  visibility?: 'public' | 'private' | 'protected' | 'internal' | 'final' | string
 }
 
 export interface BreakpointLocation {
@@ -3126,4 +3129,4 @@ export interface DisassembledInstruction {
   endColumn?: number
 }
 
-export type InvalidatedAreas = 'all' | 'stacks' | 'threads' | 'variables' | String
+export type InvalidatedAreas = 'all' | 'stacks' | 'threads' | 'variables' | string

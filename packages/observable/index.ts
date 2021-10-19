@@ -1,22 +1,24 @@
 import { PoorMansObservable } from './PoorMansObservable'
 
 export class Observable<T> extends PoorMansObservable<T> {
-  private handlers: Set<(arg0: T) => {}> = new Set()
+  private handlers: Set<(arg0: T) => unknown> = new Set()
 
   constructor() {
     super()
-    ;(async () => {
+    void (async () => {
       for await (const arg of this) {
-        this.handlers.forEach((fn) => fn(arg))
+        for (const fn of this.handlers) {
+          fn(arg)
+        }
       }
     })()
   }
 
-  on(cb: (arg0: T) => {}) {
+  on(cb: (arg0: T) => unknown) {
     this.handlers.add(cb)
   }
 
-  off(cb: (arg0: T) => {}) {
+  off(cb: (arg0: T) => unknown) {
     this.handlers.delete(cb)
   }
 }

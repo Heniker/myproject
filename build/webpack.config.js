@@ -4,11 +4,13 @@ const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 const CopyPLugin = require('copy-webpack-plugin')
 
+const baseDir = path.resolve(__dirname, '../src')
+
 /**@type {import('webpack').Configuration}*/
 const config = {
   target: 'node',
   mode: 'development',
-  entry: './src/extension.ts',
+  entry: path.resolve(baseDir, './extension.ts'),
   output: {
     clean: true,
     path: path.resolve(__dirname, 'dist'),
@@ -24,9 +26,7 @@ const config = {
     vscode: 'commonjs vscode',
   },
   resolve: {
-    plugins: [
-      // plugin,
-    ],
+    plugins: [],
     extensions: ['.ts', '.js'],
   },
   module: {
@@ -44,9 +44,7 @@ const config = {
   },
   plugins: [
     new CopyPLugin({
-      patterns: [
-        { from: path.resolve(__dirname, './src/template-package.json'), to: 'package.json' },
-      ],
+      patterns: [{ from: path.resolve(baseDir, './template-package.json'), to: 'package.json' }],
     }),
   ],
 }

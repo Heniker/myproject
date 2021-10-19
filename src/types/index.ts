@@ -167,6 +167,6 @@ export interface DebugSessionT extends DebugSession {
     command: T,
     args: CommandToArgumentsMapT[T]
   ): CommandToResponseMapT[T] extends { body: unknown }
-    ? Thenable<CommandToResponseMapT[T]['body']>
-    : Thenable<any>
+    ? PromiseLike<CommandToResponseMapT[T]['body']>
+    : PromiseLike<any>
 }

@@ -4,15 +4,17 @@ interface NextableI<T> {
 }
 
 export class PoorMansObservable<T extends unknown> {
-  private resolve: (arg: T) => void = () => {}
-  // generator *emulation* because it's not possible to clone JS generators
-  private nextable: NextableI<Promise<T>> = { value: undefined as any, next: {} as any }
-
-  constructor() {
-    this.emit(undefined as any)
+  // this methods is static so that calling it would be more explicit
+  // i.e. normally you only need it in the same place where Observable is created
+  static emit<J>(obs: PoorMansObservable<J>, value: J) {
+    obs.emit(value)
   }
 
-  emit(arg: T) {
+  private resolve: (arg: T) => void = () => {}
+
+  private nextable: NextableI<Promise<T>> = { value: undefined as any, next: {} as any }
+
+  private emit(arg: T) {
     const oldResolve = this.resolve
     const nextPromise = new Promise<T>((resolve) => {
       this.resolve = resolve
@@ -22,6 +24,10 @@ export class PoorMansObservable<T extends unknown> {
     this.nextable.next = { value: nextPromise }
 
     oldResolve(arg)
+  }
+
+  constructor() {
+    this.emit(undefined as any)
   }
 
   async *values() {
@@ -34,5 +40,5 @@ export class PoorMansObservable<T extends unknown> {
     }
   }
 
-  [Symbol.asyncIterator] = this.values
+  [Symbol.asyncIterator] = this.values.bind(this)
 }
