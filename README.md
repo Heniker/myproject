@@ -16,3 +16,8 @@ Gosh, I hope it does. I mean, there are still things to be done, but basic funct
 ### Shoutouts
 
 Kudos to [ts-morph](https://github.com/dsherret/ts-morph) for making it feasible to work with TypeScript compiler API.
+
+### Todo
+
+Really need a better way of checking type assignability
+https://github.com/microsoft/TypeScript/pull/33263/files#diff-c3ed224e4daa84352f7f1abcd23e8ccaR525-R527
