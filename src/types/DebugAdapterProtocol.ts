@@ -3,7 +3,7 @@
 // probably a good idea to extract this types to separate package
 // (why wasnt this done alredy by vscode team?)
 // ...
-// loogs like it was created, duh doy
+// looks like it was created, duh doy
 // https://www.npmjs.com/package/vscode-debugprotocol
 // #todo> replace my implementation with npm package
 
