@@ -1,12 +1,22 @@
-export interface Test {
-    magic: number;
+export interface Asd {
+    Score:         number;
+    RoundsWon:     number;
+    RoundsTied:    number;
+    PersonalScore: number;
 }
-// import { Magic42, MagicNum } from './interfaces/foo'
-
-const ab: Test = {
-  magic: 42,
+const ab: Asd = {
+  Score: 0,
+  RoundsWon: 0,
+  RoundsTied: 0,
+  PersonalScore: 50,
 }
 
 debugger
+debugger
+debugger
 
-console.log(ab)
+function test() {
+  // import('./demo2')
+}
+
+test()

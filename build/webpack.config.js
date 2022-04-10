@@ -26,6 +26,9 @@ const config = {
     vscode: 'commonjs vscode',
   },
   resolve: {
+    alias: {
+      '@': path.resolve(baseDir),
+    },
     plugins: [],
     extensions: ['.ts', '.js'],
   },

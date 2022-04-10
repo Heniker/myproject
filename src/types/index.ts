@@ -2,7 +2,7 @@ import { DebugSession } from 'vscode'
 
 import type * as P from './DebugAdapterProtocol'
 
-type RequestT =
+export type RequestT =
   | P.CancelRequest
   | P.RunInTerminalRequest
   | P.InitializeRequest
@@ -148,7 +148,7 @@ export interface CommandToArgumentsMapT
   variables: P.VariablesArguments
   setVariable: P.SetVariableArguments
   source: P.SourceArguments
-  threads: never
+  threads: void
   terminateThreads: P.TerminateThreadsArguments
   modules: P.ModulesArguments
   loadedSources: P.LoadedSourcesArguments

@@ -1,11 +1,6 @@
 // https://github.com/microsoft/debug-adapter-protocol/tree/master
-// I used some script to extract those types, but idk where I put it
-// probably a good idea to extract this types to separate package
-// (why wasnt this done alredy by vscode team?)
-// ...
-// looks like it was created, duh doy
 // https://www.npmjs.com/package/vscode-debugprotocol
-// #todo> replace my implementation with npm package
+// #todo> replace this implementation with npm package
 
 // all general `string` types in unions were replaced with `String` type
 // this was done to prevent type upcasting

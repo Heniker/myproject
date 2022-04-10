@@ -1,20 +1,41 @@
 import assert from 'assert'
-import * as quicktype from 'quicktype-core'
+import json5 from 'json5'
+import _ from 'lodash/fp'
 import * as tsMorph from 'ts-morph'
 import { isAssignableToValue } from 'ts-simple-type'
 import * as vscode from 'vscode'
+import { InterfaceCreationFault, VariableNotFound } from '@/errors'
+import { typeThis } from '@/utils'
+import { InferTypeTs } from '@/events'
 
 type TypeChecker = import('typescript').TypeChecker
 type Program = import('typescript').Program
 
-export class VariableNotFound extends Error {}
-export class InterfaceFault extends Error {}
+export const a = 42
 
-export const addInterfaces = async (
+InferTypeTs.on((arg) => {
+  const { evaluated, filePath, offset } = arg
+
+  // quicktype does not support JSON5. So have to stick with standard JSON
+  // which is a shame because we can't represent NaN, undefined and a bunch of other stuff
+  // https://github.com/quicktype/quicktype/issues/1777
+  void addInterfaces(filePath, offset, JSON.stringify(json5.parse(evaluated.result)))
+})
+
+async function saveFile(tsFile: tsMorph.SourceFile) {
+  const filePath = tsFile.getFilePath()
+
+  tsFile.saveSync()
+  await vscode.window.visibleTextEditors
+    .find((it) => it.document.fileName === filePath)
+    ?.document?.save()
+}
+
+async function addInterfaces(
   filePath: string,
   definitionLocation: number,
   runtimeRepresentation: string
-) => {
+) {
   const program = new tsMorph.Project({ compilerOptions: {} })
   const tsFile = program.addSourceFileAtPath(filePath)
 
@@ -36,25 +57,8 @@ export const addInterfaces = async (
       program.getTypeChecker().compilerObject
     )) ||
     (await tryCreateInterface(definition, runtimeRepresentation, tsFile)) ||
-    assert(false, new InterfaceFault())
+    assert(false, new InterfaceCreationFault())
   )
-}
-
-async function typeThis(json: string, name = '', lang = 'ts') {
-  const qt = quicktype.jsonInputForTargetLanguage('ts')
-  const inputData = new quicktype.InputData()
-
-  await qt.addSource({ name, samples: [json] })
-  inputData.addInput(qt)
-
-  const typings = await quicktype.quicktype({
-    inputData,
-    lang,
-    // renderOptions typing is broken
-    rendererOptions: { 'just-types': '1' },
-  })
-
-  return typings.lines.join('\n')
 }
 
 async function tryLocalInterfaces(
@@ -84,11 +88,11 @@ async function tryCreateInterface(
   const name = await vscode.window.showInputBox({ prompt: 'Interface name' })
 
   if (!name) {
-    // console.log('No name')
+    console.log('<<< Interface creation cancelled >>>')
     return false
   }
 
-  const text = await typeThis(runtimeRepresentation, name)
+  const text = await typeThis(runtimeRepresentation, name, 'ts')
   const insertLocation = tsFile.getImportDeclarations()?.pop()?.getEnd() || 0
 
   definition.setType(name[0].toUpperCase() + name.slice(1))
@@ -96,15 +100,6 @@ async function tryCreateInterface(
   await saveFile(tsFile)
 
   return true
-}
-
-async function saveFile(tsFile: tsMorph.SourceFile) {
-  const filePath = tsFile.getFilePath()
-
-  tsFile.saveSync()
-  await vscode.window.visibleTextEditors
-    .find((it) => it.document.fileName === filePath)
-    ?.document?.save()
 }
 
 function getKnownInterfaces(file: tsMorph.SourceFile) {
@@ -168,5 +163,5 @@ function getKnownInterfaces(file: tsMorph.SourceFile) {
   return new Map([
     ...externalInterfaces,
     ...file.getInterfaces().map((it) => [it, getLocalName(it)] as const),
-  ])
+  ] as const)
 }

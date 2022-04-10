@@ -7,8 +7,7 @@
     "quicktype-core": "^6.0.70",
     "ts-morph": "^12.0.0",
     "ts-node": "^10.3.0",
-    "ts-simple-type": "^1.0.7",
-    "typescript": "4.4.3"
+    "ts-simple-type": "^1.0.7"
   },
   "//": "this breaks assignability checks, but might be usefull later",
   "///": "\"@types/ts-expose-internals\": \"npm:ts-expose-internals@4.4.3\""

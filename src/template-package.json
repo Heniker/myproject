@@ -1,5 +1,5 @@
 {
-  "name": "infer-debug-types",
+  "name": "debug-types",
   "private": true,
   "publisher": "Heniker",
   "displayName": "Infer Debug Types",
@@ -21,8 +21,13 @@
   "contributes": {
     "commands": [
       {
-        "command": "inferDebugTypes.inferType",
+        "command": "debug-types.infer-type",
         "title": "Infer type",
+        "enablement": "inDebugMode"
+      },
+      {
+        "command": "debug-types.copy-type",
+        "title": "Copy type",
         "enablement": "inDebugMode"
       }
     ]

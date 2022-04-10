@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "importHelpers": true,
+    "lib": ["ESNext", "ES6", "DOM"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
